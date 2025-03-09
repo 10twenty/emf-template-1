@@ -4,6 +4,7 @@ import ScrollAnimation from './components/ScrollAnimation'
 import ProductCard from './components/ProductCard'
 import CountUp from './components/CountUp'
 import ProductSection from './components/ProductSection'
+import ScrollButton from './components/ScrollButton'
 
 export default function Home() {
   return (
@@ -12,32 +13,45 @@ export default function Home() {
       <Navbar />
       
       {/* Hero Section */}
-      <div className="relative h-screen">
-        <div className="absolute inset-0">
+      <div className="hero-section">
+        {/* Main Image Layer */}
+        <div className="hero-slide">
           <Image
             src="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?auto=format&fit=crop&q=80"
             alt="Spa atmosphere"
             fill
-            className="object-cover animate-fade-in hover-bright"
+            className="hero-image object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="hero-overlay" />
         </div>
+
+        {/* Particle Effect Layer */}
+        <div className="particles">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="particle" />
+          ))}
+        </div>
+
+        {/* Light Rays Layer */}
+        <div className="light-rays" />
+
+        {/* Content Layer */}
         <div className="relative h-full flex items-center justify-center text-center">
           <div className="container">
-            <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif text-white mb-6 animate-fade-in-up">
+            <div className="max-w-4xl mx-auto hero-content">
+              <h1 className="hero-title text-5xl sm:text-6xl md:text-7xl font-serif text-white mb-8">
                 Beauty Service HK
               </h1>
-              <p className="text-xl sm:text-2xl text-white/90 mb-8 animate-fade-in-up animate-delay-200">
+              <p className="hero-description text-xl sm:text-2xl text-white/90 mb-10 max-w-2xl mx-auto">
                 Experience luxury beauty treatments in the heart of Hong Kong
               </p>
-              <a
-                href="#services"
-                className="inline-block bg-white text-gray-900 px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-100 transition-colors animate-fade-in-up animate-delay-300 hover-glow"
+              <ScrollButton
+                targetId="services"
+                className="hero-button inline-block bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-white/30 transition-all duration-300 hover:scale-105"
               >
-                Explore Our Products
-              </a>
+                Explore Our Services
+              </ScrollButton>
             </div>
           </div>
         </div>
@@ -111,31 +125,35 @@ export default function Home() {
           </div>
 
           {/* Stats Section */}
-          <div className="mt-12 text-center">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div className="scale-fade stagger-1">
-                <div className="text-4xl font-serif text-primary mb-2">
+          <div className="mt-20 py-16 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 rounded-3xl text-center">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+              <div className="scale-fade stagger-1 group flex flex-col items-center">
+                <div className="text-5xl font-serif text-primary mb-3 transition-transform duration-300 group-hover:scale-110">
                   <CountUp end={5000} suffix="+" />
                 </div>
-                <p className="text-gray-600">Happy Clients</p>
+                <p className="text-gray-600 font-medium text-lg">Happy Clients</p>
+                <div className="w-16 h-1 bg-primary/30 mt-3 rounded-full transition-all duration-300 group-hover:w-24 group-hover:bg-primary"></div>
               </div>
-              <div className="scale-fade stagger-2">
-                <div className="text-4xl font-serif text-primary mb-2">
+              <div className="scale-fade stagger-2 group flex flex-col items-center">
+                <div className="text-5xl font-serif text-primary mb-3 transition-transform duration-300 group-hover:scale-110">
                   <CountUp end={15} suffix="+" />
                 </div>
-                <p className="text-gray-600">Years Experience</p>
+                <p className="text-gray-600 font-medium text-lg">Years Experience</p>
+                <div className="w-16 h-1 bg-primary/30 mt-3 rounded-full transition-all duration-300 group-hover:w-24 group-hover:bg-primary"></div>
               </div>
-              <div className="scale-fade stagger-3">
-                <div className="text-4xl font-serif text-primary mb-2">
+              <div className="scale-fade stagger-3 group flex flex-col items-center">
+                <div className="text-5xl font-serif text-primary mb-3 transition-transform duration-300 group-hover:scale-110">
                   <CountUp end={20} suffix="+" />
                 </div>
-                <p className="text-gray-600">Expert Staff</p>
+                <p className="text-gray-600 font-medium text-lg">Expert Staff</p>
+                <div className="w-16 h-1 bg-primary/30 mt-3 rounded-full transition-all duration-300 group-hover:w-24 group-hover:bg-primary"></div>
               </div>
-              <div className="scale-fade stagger-4">
-                <div className="text-4xl font-serif text-primary mb-2">
+              <div className="scale-fade stagger-4 group flex flex-col items-center">
+                <div className="text-5xl font-serif text-primary mb-3 transition-transform duration-300 group-hover:scale-110">
                   <CountUp end={50} suffix="+" />
                 </div>
-                <p className="text-gray-600">Luxury Products</p>
+                <p className="text-gray-600 font-medium text-lg">Luxury Products</p>
+                <div className="w-16 h-1 bg-primary/30 mt-3 rounded-full transition-all duration-300 group-hover:w-24 group-hover:bg-primary"></div>
               </div>
             </div>
           </div>
