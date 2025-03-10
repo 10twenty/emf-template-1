@@ -56,7 +56,6 @@ export default function ProductSection({
         <div className="space-y-6 text-center">
           <div className="space-y-2">
             <h3 className="text-3xl font-serif">{title}</h3>
-            <span className="text-2xl font-medium text-primary block">HK${price}</span>
           </div>
           <p className="text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto">{description}</p>
           <div className="flex justify-center gap-8">

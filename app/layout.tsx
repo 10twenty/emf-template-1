@@ -12,6 +12,15 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: 'Beauty Service HK - Premium Beauty & Spa Treatments',
   description: 'Experience luxury beauty treatments in the heart of Hong Kong. Professional skincare, massage, and anti-aging treatments.',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+    other: {
+      rel: 'apple-touch-icon',
+      url: '/favicon.svg',
+    },
+  },
 }
 
 export default function RootLayout({
