@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { content } from '../../config/content';
 
 interface ProductCardProps {
   title: string;
@@ -24,7 +25,7 @@ export default function ProductCard({
   bestseller
 }: ProductCardProps) {
   const handleEmailClick = () => {
-    window.location.href = `mailto:info@beautyservice.hk?subject=Product Inquiry: ${title}`;
+    window.location.href = `mailto:${content.contact.info.email}?subject=Product Inquiry: ${title}`;
   };
 
   return (

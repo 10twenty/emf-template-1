@@ -1,8 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { content } from '../../config/content';
 
-export default function Navbar() {
+interface NavbarProps {
+  companyName: string;
+}
+
+export default function Navbar({ companyName }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
@@ -105,7 +110,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-12">
           {/* Logo */}
           <a href="#" className="text-lg font-serif text-gray-900">
-            Beauty Service HK
+            {companyName}
           </a>
 
           {/* Desktop Menu */}
@@ -139,7 +144,7 @@ export default function Navbar() {
               Contact
             </a>
             <a
-              href="mailto:info@beautyservice.hk"
+              href={`mailto:${content.contact.info.email}`}
               className="bg-primary text-white text-sm px-3 py-1.5 rounded-full hover:bg-primary/90 transition-colors hover-glow"
             >
               Email Us
@@ -206,7 +211,7 @@ export default function Navbar() {
             </a>
             <div className="pt-2">
               <a
-                href="mailto:info@beautyservice.hk"
+                href={`mailto:${content.contact.info.email}`}
                 className="inline-block bg-primary text-white px-6 py-2.5 rounded-full hover:bg-primary/90 transition-colors hover-glow"
               >
                 Email Us

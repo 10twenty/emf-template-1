@@ -9,11 +9,20 @@ interface CountUpProps {
 }
 
 export default function CountUp({ end, duration = 1000, suffix = '' }: CountUpProps) {
+  // Initialize with 0 and use useEffect for hydration
+  const [mounted, setMounted] = useState(false);
   const [count, setCount] = useState(0);
   const elementRef = useRef<HTMLSpanElement>(null);
   const animationFrameId = useRef<number>();
 
+  // Handle initial mount
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -43,7 +52,7 @@ export default function CountUp({ end, duration = 1000, suffix = '' }: CountUpPr
         window.cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, []);
+  }, [mounted]);
 
   const startCounting = () => {
     let startTimestamp: number | null = null;
@@ -61,6 +70,11 @@ export default function CountUp({ end, duration = 1000, suffix = '' }: CountUpPr
 
     animationFrameId.current = window.requestAnimationFrame(step);
   };
+
+  // Show 0 during server-side rendering and initial mount
+  if (!mounted) {
+    return <span ref={elementRef} className="font-serif">0{suffix}</span>;
+  }
 
   return (
     <span ref={elementRef} className="font-serif">

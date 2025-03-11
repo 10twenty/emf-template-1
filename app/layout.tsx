@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, Poppins } from 'next/font/google'
 import './globals.css'
+import { content } from '../config/content'
 
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 const poppins = Poppins({ 
@@ -10,15 +11,15 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'Beauty Service HK - Premium Beauty & Spa Treatments',
-  description: 'Experience luxury beauty treatments in the heart of Hong Kong. Professional skincare, massage, and anti-aging treatments.',
+  title: `${content.companyName} - ${content.hero.description}`,
+  description: content.about.description,
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    icon: '/api/favicon',
+    shortcut: '/api/favicon',
+    apple: '/api/favicon',
     other: {
       rel: 'apple-touch-icon',
-      url: '/favicon.svg',
+      url: '/api/favicon',
     },
   },
 }

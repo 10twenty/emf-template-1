@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import { theme } from './config/theme'
 
 const config: Config = {
   content: [
@@ -9,11 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: '#D4AF37', // Gold color for luxury feel
+        primary: theme.colors.primary,
       },
       fontFamily: {
-        serif: ['Playfair Display', 'serif'],
-        sans: ['Poppins', 'sans-serif'],
+        serif: ['var(--font-playfair)', 'serif'],
+        sans: ['var(--font-poppins)', 'sans-serif'],
       },
     },
   },

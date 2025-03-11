@@ -64,7 +64,7 @@ body {
   .hover-glow {
     @apply transition-all duration-300;
     &:hover {
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+      box-shadow: 0 0 20px theme('colors.primary' / 30%);
     }
   }
 
