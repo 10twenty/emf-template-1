@@ -3,12 +3,12 @@ compatibility_date = "2024-03-11"
 compatibility_flags = ["nodejs_compat"]
 
 [build]
-command = "npm run build"
+command = "npm run export"
 cwd = "."
-dist = ".next"
+dist = "out"
 
 [site]
-bucket = ".next"
+bucket = "out"
 entry-point = "."
 
 [env.production]
@@ -18,4 +18,4 @@ name = "demo-rolex-prod"
 name = "demo-rolex-staging"
 
 # Add the pages build output directory
-pages_build_output_dir = ".next" 
+pages_build_output_dir = "out" 
