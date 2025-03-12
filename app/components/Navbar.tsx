@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { content } from '../../config/content';
 
 interface NavbarProps {
@@ -9,46 +9,31 @@ interface NavbarProps {
 
 export default function Navbar({ companyName }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
+  const [activeSection, setActiveSection] = useState('home');
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current && 
+        buttonRef.current && 
+        !menuRef.current.contains(event.target as Node) && 
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
     const handleScroll = () => {
       const sections = ['home', 'services', 'about', 'contact'];
-      const scrollPosition = window.scrollY + 100;
+      const scrollPosition = window.scrollY;
 
-      // Special handling for home section
-      const servicesSection = document.getElementById('services');
-      if (servicesSection && scrollPosition < servicesSection.offsetTop - 100) {
-        setActiveSection('home');
-        return;
-      }
-
-      // Special handling for about section to include why-us and reviews
-      const aboutSection = document.getElementById('about');
-      const whyUsSection = document.getElementById('why-us');
-      const reviewsSection = document.getElementById('reviews');
-      const contactSection = document.getElementById('contact');
-
-      if (aboutSection && whyUsSection && reviewsSection && contactSection) {
-        // Check if we're in the about, why-us, or reviews sections
-        const isInAboutSection = scrollPosition >= aboutSection.offsetTop && scrollPosition < whyUsSection.offsetTop + whyUsSection.offsetHeight;
-        const isInWhyUsSection = scrollPosition >= whyUsSection.offsetTop && scrollPosition < reviewsSection.offsetTop + reviewsSection.offsetHeight;
-        const isInReviewsSection = scrollPosition >= reviewsSection.offsetTop && scrollPosition < contactSection.offsetTop;
-
-        if (isInAboutSection || isInWhyUsSection || isInReviewsSection) {
-          setActiveSection('about');
-          return;
-        }
-      }
-
-      // Handle other sections
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
-          const top = element.offsetTop;
-          const height = element.offsetHeight;
-          
-          if (scrollPosition >= top && scrollPosition < top + height) {
+          const { top, bottom } = element.getBoundingClientRect();
+          if (top <= 100 && bottom >= 100) {
             setActiveSection(section);
             break;
           }
@@ -56,52 +41,42 @@ export default function Navbar({ companyName }: NavbarProps) {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial position
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, section: string) => {
     e.preventDefault();
-    if (id === 'home') {
+    const element = document.getElementById(section);
+    if (element) {
+      const offset = 80; // Height of the fixed navbar
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
       window.scrollTo({
-        top: 0,
+        top: offsetPosition,
         behavior: 'smooth'
       });
-    } else {
-      const element = document.getElementById(id);
-      if (element) {
-        const offset = 64; // Reduced height of the fixed navbar
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
+      setIsMenuOpen(false);
     }
-    setIsMenuOpen(false);
   };
 
   const getLinkClassName = (section: string) => {
-    const baseClasses = "text-sm transition-colors";
-    const mobileBaseClasses = "block transition-colors py-1";
-    const isActive = activeSection === section;
-    
-    return isActive 
-      ? `${baseClasses} text-primary font-medium` 
-      : `${baseClasses} text-gray-600 hover:text-primary`;
+    return `text-sm font-medium transition-colors hover:text-primary ${
+      activeSection === section ? 'text-primary' : 'text-gray-600'
+    }`;
   };
 
   const getMobileLinkClassName = (section: string) => {
-    const mobileBaseClasses = "block transition-colors py-1";
-    const isActive = activeSection === section;
-    
-    return isActive 
-      ? `${mobileBaseClasses} text-primary font-medium` 
-      : `${mobileBaseClasses} text-gray-600 hover:text-primary`;
+    return `block text-base font-medium transition-colors hover:text-primary ${
+      activeSection === section ? 'text-primary' : 'text-gray-600'
+    }`;
   };
 
   return (
@@ -153,11 +128,13 @@ export default function Navbar({ companyName }: NavbarProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-600 hover:text-gray-900"
+            ref={buttonRef}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
           >
             <svg
-              className="w-5 h-5"
+              className="w-6 h-6 text-gray-600"
               fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -176,46 +153,49 @@ export default function Navbar({ companyName }: NavbarProps) {
 
         {/* Mobile Menu */}
         <div
-          className={`md:hidden ${
-            isMenuOpen ? 'max-h-[400px]' : 'max-h-0'
-          } overflow-hidden transition-all duration-300 ease-in-out`}
+          ref={menuRef}
+          className={`md:hidden absolute top-12 left-0 right-0 bg-white border-t border-gray-100 shadow-lg transition-all duration-300 ease-in-out ${
+            isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+          }`}
         >
-          <div className="py-6 space-y-4">
-            <a
-              href="#"
-              onClick={(e) => scrollToSection(e, 'home')}
-              className={getMobileLinkClassName('home')}
-            >
-              Home
-            </a>
-            <a
-              href="#services"
-              onClick={(e) => scrollToSection(e, 'services')}
-              className={getMobileLinkClassName('services')}
-            >
-              Products
-            </a>
-            <a
-              href="#about"
-              onClick={(e) => scrollToSection(e, 'about')}
-              className={getMobileLinkClassName('about')}
-            >
-              About
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => scrollToSection(e, 'contact')}
-              className={getMobileLinkClassName('contact')}
-            >
-              Contact
-            </a>
-            <div className="pt-2">
+          <div className="container mx-auto px-4">
+            <div className="py-6 space-y-4">
               <a
-                href={`mailto:${content.contact.info.email}`}
-                className="inline-block bg-primary text-white px-6 py-2.5 rounded-full hover:bg-primary/90 transition-colors hover-glow"
+                href="#"
+                onClick={(e) => scrollToSection(e, 'home')}
+                className={getMobileLinkClassName('home')}
               >
-                Email Us
+                Home
               </a>
+              <a
+                href="#services"
+                onClick={(e) => scrollToSection(e, 'services')}
+                className={getMobileLinkClassName('services')}
+              >
+                Products
+              </a>
+              <a
+                href="#about"
+                onClick={(e) => scrollToSection(e, 'about')}
+                className={getMobileLinkClassName('about')}
+              >
+                About
+              </a>
+              <a
+                href="#contact"
+                onClick={(e) => scrollToSection(e, 'contact')}
+                className={getMobileLinkClassName('contact')}
+              >
+                Contact
+              </a>
+              <div className="pt-2">
+                <a
+                  href={`mailto:${content.contact.info.email}`}
+                  className="inline-block bg-primary text-white px-6 py-2.5 rounded-full hover:bg-primary/90 transition-colors hover-glow"
+                >
+                  Email Us
+                </a>
+              </div>
             </div>
           </div>
         </div>
