@@ -11,11 +11,9 @@ dist = "out"
 bucket = "out"
 entry-point = "."
 
+# Production environment only
 [env.production]
-name = "demo-rolex-prod"
-
-[env.staging]
-name = "demo-rolex-staging"
+name = "demo-rolex"
 
 # Add the pages build output directory
 pages_build_output_dir = "out" 
