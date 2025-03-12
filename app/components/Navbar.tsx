@@ -52,19 +52,25 @@ export default function Navbar({ companyName }: NavbarProps) {
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, section: string) => {
     e.preventDefault();
-    const element = document.getElementById(section);
-    if (element) {
-      const offset = 80; // Height of the fixed navbar
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
+    if (section === 'home') {
       window.scrollTo({
-        top: offsetPosition,
+        top: 0,
         behavior: 'smooth'
       });
+    } else {
+      const element = document.getElementById(section);
+      if (element) {
+        const offset = 80; // Height of the fixed navbar
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
 
-      setIsMenuOpen(false);
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
     }
+    setIsMenuOpen(false);
   };
 
   const getLinkClassName = (section: string) => {

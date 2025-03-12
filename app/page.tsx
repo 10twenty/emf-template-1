@@ -44,7 +44,7 @@ export default function Home() {
       <Navbar companyName={content.companyName} />
       
       {/* Hero Section */}
-      <div className="hero-section">
+      <div id="home" className="hero-section">
         {/* Main Image Layer */}
         <div className="hero-slide">
           <Image
