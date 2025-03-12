@@ -15,12 +15,6 @@ export const metadata: Metadata = {
   description: content.about.description,
   icons: {
     icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
-    other: {
-      rel: 'apple-touch-icon',
-      url: '/favicon.svg',
-    },
   },
 }
 
